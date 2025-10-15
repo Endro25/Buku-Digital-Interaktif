@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Rafi di Pasar Buah Ajaib</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #1976d2;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #d32f2f;
+            margin: 20px 0;
+            font-size: 1.8em;
+        }
+
+        .fruit-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .fruit-item {
+            text-align: center;
+            padding: 20px;
+            background: #fff3e0;
+            border-radius: 15px;
+            min-width: 150px;
+        }
+
+        .fruit-emoji {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        .interactive-box {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 3px dashed #ff9800;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn-correct {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+        }
+
+        .btn-wrong {
+            background: linear-gradient(135deg, #f44336, #c62828);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .correct {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .wrong {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .certificate {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border: 15px solid #ffd700;
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .certificate-border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid #ff9800;
+            pointer-events: none;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .stars {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+
+        .confetti {
+            font-size: 3em;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .audio-btn {
+            background: #ff5722;
+            display: inline-block;
+        }
+
+        .calculation-area {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- HALAMAN 1 - SAMBUTAN -->
+    <div id="page1" class="page active">
+        <div style="background: linear-gradient(135deg, #ffeb3b, #4caf50); padding: 40px; border-radius: 20px; text-align: center; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            <h1>🍎 PETUALANGAN RAFI DI PASAR BUAH AJAIB 🍊</h1>
+            
+            <div style="background: white; padding: 20px; border-radius: 15px; margin: 30px 0; display: inline-block;">
+                <div style="font-size: 6em;">👦</div>
+            </div>
+
+            <button class="btn audio-btn" onclick="playNarasi()">
+                🔊 DENGARKAN CERITA
+            </button>
+
+            <div id="narasi" style="display: none; background: rgba(255,255,255,0.9); color: #333; padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <p style="font-size: 1.2em;">"Hai! Aku Rafi! Hari ini aku sangat senang karena akan pergi ke Pasar Buah Ajaib. Ibu memintaku membeli buah-buahan segar untuk keluarga, tapi katanya setiap buah di pasar ini punya teka-teki matematika yang harus diselesaikan. Ayo bantu aku menyelesaikan semua teka-teki agar bisa membawa pulang buah-buahan segar!"</p>
+            </div>
+
+            <button class="btn" onclick="showPage(2)">
+                MULAI PETUALANGAN 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 2 - DAFTAR BELANJA -->
+    <div id="page2" class="page">
+        <h2>📝 DAFTAR BELANJA RAFI</h2>
+        
+        <div class="fruit-container">
+            <div class="fruit-item">
+                <div class="fruit-emoji">🍎</div>
+                <p>3 Apel<br><strong>@Rp4.000</strong></p>
+            </div>
+            <div class="fruit-item">
+                <div class="fruit-emoji">🍊</div>
+                <p>2 Jeruk<br><strong>@Rp3.000</strong></p>
+            </div>
+            <div class="fruit-item">
+                <div class="fruit-emoji">🍌</div>
+                <p>4 Pisang<br><strong>@Rp2.000</strong></p>
+            </div>
+        </div>
+
+        <div class="interactive-box">
+            <h3>💡 SOAL INTERAKTIF:</h3>
+            <p style="font-size: 1.2em;"><strong>"Berapa total uang yang Rafi butuhkan untuk membeli semua buah ini?"</strong></p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                <button class="btn btn-wrong" onclick="checkAnswer(20000)">A) Rp20.000</button>
+                <button class="btn btn-wrong" onclick="checkAnswer(24000)">B) Rp24.000</button>
+                <button class="btn btn-correct" onclick="checkAnswer(26000)">C) Rp26.000</button>
+                <button class="btn btn-wrong" onclick="checkAnswer(28000)">D) Rp28.000</button>
+            </div>
+
+            <div id="feedback1" class="feedback"></div>
+        </div>
+
+        <div class="navigation">
+            <button class="btn" onclick="showCalculation()">
+                🧮 LIHAT CARA HITUNG
+            </button>
+            <button class="btn" onclick="showPage(3)">
+                LANJUT ➡️
+            </button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 3 - TEKA-TEKI APEL -->
+    <div id="page3" class="page">
+        <h2>🎁 PROMO APEL SPESIAL!</h2>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <div style="font-size: 5em;">🍎🍎🍎+🎁</div>
+            <p style="font-size: 1.3em; background: #ff5722; color: white; padding: 15px; border-radius: 15px; display: inline-block;">
+                <strong>BELI 3 DAPAT 1 GRATIS!</strong>
+            </p>
+        </div>
+
+        <div class="interactive-box">
+            <h3>💡 TEKA-TEKI:</h3>
+            <p style="font-size: 1.2em;"><strong>"Jika harga 1 apel Rp4.000, berapa yang harus Rafi bayar untuk mendapatkan 4 apel?"</strong></p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; margin: 30px 0; flex-wrap: wrap;">
+                <button class="btn" onclick="addApple(1)" style="font-size: 1.5em; padding: 20px;">🍎</button>
+                <button class="btn" onclick="addApple(2)" style="font-size: 1.5em; padding: 20px;">🍎🍎</button>
+                <button class="btn" onclick="addApple(3)" style="font-size: 1.5em; padding: 20px;">🍎🍎🍎</button>
+            </div>
+
+            <div id="appleResult" style="text-align: center; padding: 20px; background: #fff3e0; border-radius: 15px; margin: 20px 0;">
+                <p>Klik tombol apel untuk mulai berhitung!</p>
+            </div>
+
+            <div id="appleExplanation" style="display: none; background: #e8f5e8; padding: 20px; border-radius: 15px; margin-top: 20px;">
+                <h4>📚 PENJELASAN:</h4>
+                <p>Rafi hanya membayar 3 apel karena dapat 1 gratis:<br>
+                <strong>3 × Rp4.000 = Rp12.000</strong></p>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="btn" onclick="showPage(4)">
+                LANJUT KE JERUK 🍊
+            </button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 7 - TANTANGAN AKHIR -->
+    <div id="page7" class="page">
+        <h2>🏆 TANTANGAN AKHIR!</h2>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <div style="font-size: 4em;">🧙‍♂️</div>
+            <p style="font-size: 1.2em; background: #ff9800; color: white; padding: 20px; border-radius: 15px; display: inline-block;">
+                <strong>"Untuk membawa pulang semua buah, selesaikan tantangan terakhir!"</strong>
+            </p>
+        </div>
+
+        <div class="interactive-box">
+            <h3>💡 SOAL TANTANGAN:</h3>
+            <p style="font-size: 1.3em; text-align: center;"><strong>"Jika Rafi membeli lagi 2 jeruk dan 1 apel, berapa total pengeluarannya sekarang?"</strong></p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0;">
+                <button class="btn" onclick="addItem('jeruk')" style="font-size: 1.2em; padding: 25px;">
+                    🍊 +2 Jeruk<br><small>@Rp3.000</small>
+                </button>
+                <button class="btn" onclick="addItem('apel')" style="font-size: 1.2em; padding: 25px;">
+                    🍎 +1 Apel<br><small>@Rp4.000</small>
+                </button>
+            </div>
+
+            <div class="calculation-area">
+                <h4>📊 PERHITUNGAN:</h4>
+                <div id="itemList">
+                    <p>Belanja awal: <strong>Rp26.000</strong></p>
+                </div>
+                <div id="totalArea" style="background: #c8e6c9; padding: 20px; border-radius: 10px; margin-top: 15px;">
+                    <p style="font-size: 1.3em;"><strong>TOTAL: Rp26.000</strong></p>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn" onclick="calculateTotal()" style="font-size: 1.2em;">
+                    🧮 HITUNG TOTAL AKHIR
+                </button>
+            </div>
+
+            <div id="finalResult" style="display: none; background: linear-gradient(135deg, #4caf50, #2e7d32); color: white; padding: 30px; border-radius: 20px; text-align: center; margin-top: 25px;">
+                <div style="font-size: 4em;">🎉</div>
+                <h3>SELAMAT! KAMU HEBAT! 🌟</h3>
+                <p style="font-size: 1.3em;">Total pengeluaran Rafi: <strong>Rp36.000</strong></p>
+                <p>Kamu berhasil menyelesaikan semua tantangan matematika!</p>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="btn" onclick="showPage(8)">
+                REFLEKSI PETUALANGAN 💭
+            </button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 10 - SERTIFIKAT -->
+    <div id="page10" class="page">
+        <div class="certificate">
+            <div class="certificate-border"></div>
+            
+            <div style="font-size: 4em; margin-bottom: 10px;">🍎🍊🍌</div>
+            
+            <h1 style="color: #d32f2f; font-size: 2.5em; margin-bottom: 10px; text-decoration: underline;">SERTIFIKAT PENGHARGAAN</h1>
+            <p style="font-size: 1.3em; color: #5d4037; margin-bottom: 30px;">Diberikan kepada:</p>
+            
+            <div style="background: white; padding: 20px; margin: 20px auto; border: 2px dashed #ff9800; border-radius: 15px; max-width: 400px;">
+                <input type="text" id="studentName" placeholder="Ketik namamu di sini" style="width: 100%; padding: 15px; font-size: 1.5em; text-align: center; border: none; outline: none;">
+            </div>
+            
+            <p style="font-size: 1.3em; color: #5d4037; margin: 30px 0;">
+                <strong>Atas partisipasinya yang luar biasa dalam menyelesaikan<br>
+                "PETUALANGAN MATEMATIKA DI PASAR BUAH AJAIB"</strong>
+            </p>
+            
+            <div style="display: flex; justify-content: space-around; margin: 40px 0; flex-wrap: wrap;">
+                <div style="margin: 10px;">
+                    <p style="border-bottom: 2px solid #ff9800; padding-bottom: 5px;">Tanggal</p>
+                    <p id="currentDate" style="font-weight: bold; margin-top: 10px;"></p>
+                </div>
+                <div style="margin: 10px;">
+                    <p style="border-bottom: 2px solid #ff9800; padding-bottom: 5px;">Tanda Tangan Guru</p>
+                    <p style="font-size: 1.5em; font-weight: bold; margin-top: 10px;">✍️</p>
+                </div>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <button class="btn" onclick="giveStars()" style="background: linear-gradient(135deg, #ffd700, #ff9800); font-size: 1.2em;">
+                    ⭐ BERI BINTANG PENGHARGAAN ⭐
+                </button>
+            </div>
+
+            <div id="starContainer" class="stars"></div>
+
+            <div id="confetti" class="confetti" style="display: none;">
+                🎉🎊🥳 SELAMAT! 🥳🎊🎉
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="btn" onclick="downloadCertificate()" style="background: #4caf50;">
+                    📥 DOWNLOAD SERTIFIKAT
+                </button>
+                <button class="btn" onclick="restartAdventure()" style="background: #2196f3;">
+                    🔁 MULAI LAGI
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variabel global
+        let currentPage = 1;
+        let appleCount = 0;
+        let starCount = 0;
+        let items = {
+            belanjaAwal: 26000,
+            jeruk: 0,
+            apel: 0
+        };
+
+        // Fungsi navigasi halaman
+        function showPage(pageNumber) {
+            document.getElementById('page' + currentPage).classList.remove('active');
+            document.getElementById('page' + pageNumber).classList.add('active');
+            currentPage = pageNumber;
+        }
+
+        // Fungsi untuk halaman 1 - Narasi
+        function playNarasi() {
+            const narasi = document.getElementById('narasi');
+            narasi.style.display = 'block';
+            // Di aplikasi nyata, bisa tambahkan audio play di sini
+        }
+
+        // Fungsi untuk halaman 2 - Kuis
+        function checkAnswer(answer) {
+            const feedback = document.getElementById('feedback1');
+            if (answer === 26000) {
+                feedback.innerHTML = '✅ <strong>TEPAT SEKALI!</strong><br>3×4.000 + 2×3.000 + 4×2.000 = 12.000 + 6.000 + 8.000 = <strong>Rp26.000</strong>';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.innerHTML = '❎ <strong>COBA HITUNG LAGI!</strong><br>Rumus: (3×4.000) + (2×3.000) + (4×2.000)';
+                feedback.className = 'feedback wrong';
+            }
+            feedback.style.display = 'block';
+        }
+
+        function showCalculation() {
+            alert('PERHITUNGAN:\n\n3 Apel × Rp4.000 = Rp12.000\n2 Jeruk × Rp3.000 = Rp6.000\n4 Pisang × Rp2.000 = Rp8.000\n------------------- +\nTOTAL: Rp26.000');
+        }
+
+        // Fungsi untuk halaman 3 - Apel
+        function addApple(count) {
+            appleCount = count;
+            const result = document.getElementById('appleResult');
+            const explanation = document.getElementById('appleExplanation');
+            
+            if (count === 1) {
+                result.innerHTML = '🍎<br><strong>1 apel = Rp4.000</strong><br>Masih perlu 3 lagi untuk dapat gratis!';
+            } else if (count === 2) {
+                result.innerHTML = '🍎🍎<br><strong>2 apel = Rp8.000</strong><br>Sedikit lagi dapat gratis!';
+            } else if (count === 3) {
+                result.innerHTML = '🍎🍎🍎 + 🎁<br><strong>3 apel = Rp12.000</strong><br>+ 1 apel GRATIS!<br><strong>TOTAL: 4 apel = Rp12.000</strong>';
+                explanation.style.display = 'block';
+            }
+        }
+
+        // Fungsi untuk halaman 7 - Tantangan Akhir
+        function addItem(type) {
+            if (type === 'jeruk') {
+                items.jeruk += 2;
+            } else if (type === 'apel') {
+                items.apel += 1;
+            }
+            updateCalculation();
+        }
+
+        function updateCalculation() {
+            const itemList = document.getElementById('itemList');
+            let html = `<p>Belanja awal: <strong>Rp26.000</strong></p>`;
+            
+            if (items.jeruk > 0) {
+                const hargaJeruk = items.jeruk * 3000;
+                html += `<p>+ ${items.jeruk} jeruk: <strong>Rp${hargaJeruk.toLocaleString('id-ID')}</strong></p>`;
+            }
+            
+            if (items.apel > 0) {
+                const hargaApel = items.apel * 4000;
+                html += `<p>+ ${items.apel} apel: <strong>Rp${hargaApel.toLocaleString('id-ID')}</strong></p>`;
+            }
+            
+            itemList.innerHTML = html;
+        }
+
+        function calculateTotal() {
+            const totalJeruk = items.jeruk * 3000;
+            const totalApel = items.apel * 4000;
+            const total = items.belanjaAwal + totalJeruk + totalApel;
+            
+            const totalArea = document.getElementById('totalArea');
+            totalArea.innerHTML = `<p style="font-size: 1.3em;"><strong>TOTAL: Rp${total.toLocaleString('id-ID')}</strong></p>`;
+            
+            const finalResult = document.getElementById('finalResult');
+            finalResult.style.display = 'block';
+            
+            // Animasi konfeti
+            setTimeout(() => {
+                alert('🎉 SELAMAT! Kamu berhasil membantu Rafi! 🎉');
+            }, 500);
+        }
+
+        // Fungsi untuk halaman 10 - Sertifikat
+        function setCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('id-ID', options);
+        }
+
+        function giveStars() {
+            const studentName = document.getElementById('studentName').value || 'Pahlawan Matematika';
+            const starContainer = document.getElementById('starContainer');
+            const confetti = document.getElementById('confetti');
+            
+            starCount++;
+            starContainer.innerHTML = '⭐'.repeat(starCount);
+            
+            if (starCount >= 3) {
+                confetti.style.display = 'block';
+                starContainer.innerHTML += '<br><strong>KAMU LUAR BIASA! 🏆</strong>';
+                
+                setTimeout(() => {
+                    alert(`🎉 SELAMAT ${studentName.toUpperCase()}! 🎉\nKamu telah menyelesaikan semua tantangan dengan sempurna!`);
+                }, 300);
+            }
+        }
+
+        function downloadCertificate() {
+            const studentName = document.getElementById('studentName').value || 'Pahlawan Matematika';
+            alert(`Sertifikat untuk ${studentName} sedang diunduh...\n\n(Dalam aplikasi nyata, ini akan mengunduh PDF sertifikat)`);
+        }
+
+        function restartAdventure() {
+            if (confirm('Apakah kamu ingin memulai petualangan lagi dari awal?')) {
+                // Reset semua variabel
+                currentPage = 1;
+                appleCount = 0;
+                starCount = 0;
+                items = { belanjaAwal: 26000, jeruk: 0, apel: 0 };
+                
+                // Reset tampilan
+                document.getElementById('studentName').value = '';
+                document.getElementById('starContainer').innerHTML = '';
+                document.getElementById('confetti').style.display = 'none';
+                
+                // Kembali ke halaman 1
+                showPage(1);
+                
+                alert('Memulai petualangan baru! Semoga menyenangkan! 🚀');
+            }
+        }
+
+        // Inisialisasi saat halaman dimuat
+        window.onload = function() {
+            setCurrentDate();
+        };
+    </script>
+</body>
+</html>
